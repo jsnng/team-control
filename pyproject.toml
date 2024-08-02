@@ -7,6 +7,7 @@ name = "TeamControl"
 requires-python = ">=3.10"
 dependencies = [
     "numpy",
+    "protobuf",
     "argparse",
 ]
 
@@ -18,4 +19,4 @@ dynamic = [
 where = ["src"]
 
 [tools.setuptools.dynamic]
-version = {attr = "tc.__version__"}
+version = {attr = "TeamControl.__version__"}

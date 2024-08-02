@@ -4,4 +4,5 @@ share/
 lib/
 pyvenv.cfg
 *.egg-info/
-.DS_Store/
+.DS_Store
+.venv/

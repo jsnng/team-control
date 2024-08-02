@@ -61,8 +61,8 @@ class SSL_DetectionBall:
 
     @confidence.setter
     def confidence(self, confidence: float) -> None:
-        if not isinstance(type, float):
-            log.error(f'parameter `confidence` is not an object of type `{float}`')
+        if not isinstance(confidence, float):
+            log.error(f'parameter `confidence` {type(confidence)} is not an object of type `{float}`')
         self._confidence = confidence
 
     @property
@@ -71,8 +71,8 @@ class SSL_DetectionBall:
 
     @area.setter
     def area(self, area: int) -> None:
-        if not isinstance(type, int):
-            log.error(f'parameter `area` is not an object of type `{int}`')
+        if not isinstance(area, int):
+            log.error(f'parameter `area` {type(area)} is not an object of type `{int}`')
         self._area = area
 
     @property
@@ -81,8 +81,8 @@ class SSL_DetectionBall:
 
     @x.setter
     def x(self, x: float) -> None:
-        if not isinstance(type, float):
-            log.error(f'parameter `x` is not an object of type `{float}`')
+        if not isinstance(x, float):
+            log.error(f'parameter `x` {type(x)} is not an object of type `{float}`')
         self._x = x
 
     @property
@@ -91,8 +91,8 @@ class SSL_DetectionBall:
 
     @y.setter
     def y(self, y: float) -> None:
-        if not isinstance(type, float):
-            log.error(f'parameter `y` is not an object of type `{float}`')
+        if not isinstance(y, float):
+            log.error(f'parameter `y` {type(y)} is not an object of type `{float}`')
         self._y = y
 
     @property
@@ -101,8 +101,8 @@ class SSL_DetectionBall:
 
     @z.setter
     def orientation(self, z: float) -> None:
-        if not isinstance(type, float):
-            log.error(f'parameter `z` is not an object of type `{float}`')
+        if not isinstance(z, float):
+            log.error(f'parameter `z` {type(z)} is not an object of type `{float}`')
         self._z = z
 
     @property
@@ -111,8 +111,8 @@ class SSL_DetectionBall:
 
     @pixel_x.setter
     def pixel_x(self, pixel_x: float) -> None:
-        if not isinstance(type, float):
-            log.error(f'parameter `pixel_x` is not an object of type `{float}`')
+        if not isinstance(pixel_x, float):
+            log.error(f'parameter `pixel_x` {type(pixel_x)} is not an object of type `{float}`')
         self._pixel_x = pixel_x
 
     @property
@@ -121,8 +121,8 @@ class SSL_DetectionBall:
 
     @pixel_y.setter
     def pixel_y(self, pixel_y: float) -> None:
-        if not isinstance(type, float):
-            log.error(f'parameter `pixel_y` is not an object of type `{float}`')
+        if not isinstance(pixel_y, float):
+            log.error(f'parameter `pixel_y` {type(pixel_y)} is not an object of type `{float}`')
         self._pixel_y = pixel_y
 
 
@@ -182,7 +182,7 @@ class SSL_DetectionRobot:
     @confidence.setter
     def confidence(self, confidence: float) -> None:
         if not isinstance(type, float):
-            log.error(f'parameter `confidence` is not an object of type `{float}`')
+            log.error(f'parameter `confidence` {type(confidence)}  is not an object of type `{float}`')
         self._confidence = confidence
 
     @property
@@ -190,10 +190,10 @@ class SSL_DetectionRobot:
         return self._robotId
 
     @robotId.setter
-    def robotId(self, robotId: int) -> None:
+    def robotId(self, robot_id: int) -> None:
         if not isinstance(type, int):
-            log.error(f'parameter `robotId` is not an object of type `{int}`')
-        self._robotId = robotId
+            log.error(f'parameter `robot_id` {type(robot_id)} is not an object of type `{int}`')
+        self._robotId = robot_id
 
     @property
     def x(self) -> float:
@@ -202,7 +202,7 @@ class SSL_DetectionRobot:
     @x.setter
     def x(self, x: float) -> None:
         if not isinstance(type, float):
-            log.error(f'parameter `x` is not an object of type `{float}`')
+            log.error(f'parameter `x` {type(x)}  is not an object of type `{float}`')
         self._x = x
 
     @property
@@ -212,7 +212,7 @@ class SSL_DetectionRobot:
     @y.setter
     def y(self, y: float) -> None:
         if not isinstance(type, float):
-            log.error(f'parameter `y` is not an object of type `{float}`')
+            log.error(f'parameter `y` {type(y)} is not an object of type `{float}`')
         self._y = y
 
     @property
@@ -221,8 +221,8 @@ class SSL_DetectionRobot:
 
     @z.setter
     def orientation(self, z):
-        if not isinstance(type, float):
-            log.error(f'parameter `z` is not an object of type `{float}`')
+        if not isinstance(z, float):
+            log.error(f'parameter `z` {type(z)} is not an object of type `{float}`')
         self._z = z
 
     @property
@@ -231,8 +231,8 @@ class SSL_DetectionRobot:
 
     @pixel_x.setter
     def pixel_x(self, pixel_x):
-        if not isinstance(type, float):
-            log.error(f'parameter `pixel_x` is not an object of type `{float}`')
+        if not isinstance(pixel_x, float):
+            log.error(f'parameter `pixel_x` {type(pixel_x)} is not an object of type `{float}`')
         self._pixel_x = pixel_x
 
     @property
@@ -242,7 +242,7 @@ class SSL_DetectionRobot:
     @pixel_y.setter
     def pixel_y(self, pixel_y):
         if not isinstance(type, float):
-            log.error(f'parameter `pixel_y` is not an object of type `{float}`')
+            log.error(f'parameter `pixel_y` {type(pixel_y)}  is not an object of type `{float}`')
         self._pixel_y = pixel_y
 
 
@@ -307,7 +307,7 @@ class SSL_DetectionFrame:
     @frame_number.setter
     def frame_number(self, frame_number: int) -> None:
         if not isinstance(frame_number, int):
-            log.error(f'parameter `frame_number` is not an object of type `{int}`')
+            log.error(f'parameter `frame_number` {type(frame_number)}  is not an object of type `{int}`')
         self._frame_number = frame_number
 
     @property
@@ -317,7 +317,7 @@ class SSL_DetectionFrame:
     @t_capture.setter
     def t_capture(self, t_capture: float) -> None:
         if not isinstance(t_capture, float):
-            log.error(f'parameter `t_capture` is not an object of type `{float}`')
+            log.error(f'parameter `t_capture` {type(t_capture)} is not an object of type `{float}`')
         self._t_capture = t_capture
 
     @property
@@ -327,7 +327,7 @@ class SSL_DetectionFrame:
     @t_sent.setter
     def t_sent(self, t_sent: float) -> None:
         if not isinstance(t_sent, float):
-            log.error(f'parameter `t_sent` is not an object of type `{float}`')
+            log.error(f'parameter `t_sent` {type(t_sent)} is not an object of type `{float}`')
         self._t_sent = t_sent
 
     @property
@@ -337,7 +337,7 @@ class SSL_DetectionFrame:
     @camera_id.setter
     def camera_id(self, camera_id: int) -> None:
         if not isinstance(camera_id, int):
-            log.error(f'parameter `camera_id` is not an object of type `{int}`')
+            log.error(f'parameter `camera_id` {type(camera_id)} is not an object of type `{int}`')
         self._camera_id = camera_id
 
     @property
@@ -347,7 +347,7 @@ class SSL_DetectionFrame:
     @balls.setter
     def balls(self, balls: list[SSL_DetectionBall]) -> None:
         if not isinstance(balls, list):
-            log.error(f'parameter `balls` is not an object of type `{list}`')
+            log.error(f'parameter `balls` {type(balls)}  is not an object of type `{list}`')
         self._balls = balls
 
     @property
@@ -357,7 +357,7 @@ class SSL_DetectionFrame:
     @robots_yellow.setter
     def robots_yellow(self, robots_yellow: list[SSL_DetectionRobot]) -> None:
         if not isinstance(robots_yellow, list):
-            log.error(f'parameter `robots_yellow` is not an object of type `{list}`')
+            log.error(f'parameter `robots_yellow` {type(robots_yellow)} is not an object of type `{list}`')
         self._robots_yellow = robots_yellow
 
     @property
@@ -367,7 +367,7 @@ class SSL_DetectionFrame:
     @robots_blue.setter
     def robots_blue(self, robots_blue: list[SSL_DetectionRobot]) -> None:
         if not isinstance(robots_blue, list):
-            log.error(f'parameter `robots_blue` is not an object of type `{list}`')
+            log.error(f'parameter `robots_blue` {type(robots_blue)} is not an object of type `{list}`')
         self._robots_blue = robots_blue
 
     def __setattr__(self, name: object, value: object) -> None:

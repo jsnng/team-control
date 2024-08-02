@@ -1,4 +1,4 @@
-from TeamControl.Model.ssl_vision_wrapper_py import ssl_vision_wrapper_py
+from TeamControl.Model.ssl_vision_wrapper_py import SSL_WrapperPacket
 from collections import deque
 
 class World:
@@ -62,7 +62,7 @@ class World:
             refer to :doc:`src/TeamControl/SSL/proto2/ssl_vision_wrapper.proto` for 
             the structure of `SSL_WrapperPacket`
         """
-        new_frame = ssl_vision_wrapper_py(**kwargs)
+        new_frame = SSL_WrapperPacket(**kwargs)
         if new_frame.is_detection_frame:
             self.ssl_detection_frames.append(new_frame)
             
