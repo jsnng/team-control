@@ -1,1 +1,7 @@
-.DS_Store
+__pycache__/
+bin/
+share/
+lib/
+pyvenv.cfg
+*.egg-info/
+.DS_Store/
