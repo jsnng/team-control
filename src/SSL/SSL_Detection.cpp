@@ -1,6 +1,6 @@
-#include "SSL_DetectionFrame.hpp"
+#include "ssl_detection.h"
 
-using namespace tc::protobuf::detection;
+using namespace ssl::protobuf::detection;
 
 SSL_DetectionFrame::SSL_DetectionFrame() {
 }
