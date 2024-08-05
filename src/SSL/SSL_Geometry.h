@@ -1,5 +1,5 @@
-#ifndef SSL_GEOMETRYDATA_H__
-#define SSL_GEOMETRYDATA_H__
+#ifndef SSL_GEOMETRYDATA_H_
+#define SSL_GEOMETRYDATA_H_
 
 #include <vector>
 #include <cassert>
@@ -125,4 +125,4 @@ class SSL_GeometryData {
 } // namespace geometry
 } // namespace protobuf
 } // namespace tc
-#endif // SSL_GEOMETRYDATA_H__
+#endif // SSL_GEOMETRYDATA_H_

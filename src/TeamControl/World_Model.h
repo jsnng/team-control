@@ -1,5 +1,5 @@
-#ifndef WORLD_MODEL_H__
-#define WORLD_MODEL_H__
+#ifndef WORLD_MODEL_H_
+#define WORLD_MODEL_H_
 
 #include <ssl/ssl_detection.h>
 #include <ssl/ssl_geometry.h>
@@ -17,4 +17,4 @@ class WorldModel {
         ssl_geometry::SSL_GeometryData* ssl_vision_geometry_data;
 };
 
-#endif // WORLD_MODEL_H__
+#endif // WORLD_MODEL_H_

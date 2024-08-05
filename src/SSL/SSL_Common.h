@@ -1,5 +1,5 @@
-#ifndef SSL_COMMON_H__
-#define SSL_COMMON_H__
+#ifndef SSL_COMMON_H_
+#define SSL_COMMON_H_
 
 #include <vector>
 #include <cassert>
@@ -29,4 +29,4 @@ std::string to_string(const Division&) noexcept;
 
 } // protobuf
 } // tc
-#endif // SSL_COMMON_H__
+#endif // SSL_COMMON_H_

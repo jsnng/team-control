@@ -1,7 +1,8 @@
-#ifndef SSL_DETECTIONFRAME_H__
-#define SSL_DETECTIONFRAME_H__
+#ifndef SSL_DETECTIONFRAME_H_
+#define SSL_DETECTIONFRAME_H_
 
 #include <vector>
+#include <optional>
 
 namespace ssl {
 namespace protobuf {
@@ -46,4 +47,4 @@ class SSL_DetectionFrame {
 } // detection
 } // protobuf
 } // tc
-#endif // SSL_DETECTIONFRAME_H__ 
+#endif // SSL_DETECTIONFRAME_H_ 
