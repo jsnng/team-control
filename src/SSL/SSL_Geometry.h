@@ -8,6 +8,10 @@ namespace ssl {
 namespace protobuf {
 namespace geometry {
 
+/**
+* protobuf message `SSL_GeometryData`
+* @see src/TeamControl/protobuf/ssl_vision_geometry.proto
+*/
 class SSL_GeometryData {
     public:
         enum class SSL_FieldShapeType {

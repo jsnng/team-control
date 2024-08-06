@@ -21,8 +21,10 @@ bool
 SSLReceiverBase::set_ssl_multicast_socket(
     std::string group_ip_addr,
     uint32_t port) {
+
     // create a socket, issue ::setsockopt() for timeout/broadcasting
     // and bind it.
+
     sockfd = ::socket(AF_INET, SOCK_DGRAM, 0);
     if(sockfd < 0) {
         throw std::runtime_error("Error opening socket.");

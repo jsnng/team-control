@@ -8,6 +8,10 @@ namespace ssl {
 namespace protobuf {
 namespace detection {
 
+/**
+* protobuf message `SSL_DetectionFrame`
+* @see src/TeamControl/protobuf/ssl_vision_detection.proto
+*/
 class SSL_DetectionFrame {
     private:
         struct SSL_DetectionBall {

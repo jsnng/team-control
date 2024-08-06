@@ -1,5 +1,5 @@
-#ifndef SSL_REFEREE_H__
-#define SSL_REFEREE_H__
+#ifndef SSL_REFEREE_H_
+#define SSL_REFEREE_H_
 
 #include "ssl_common.h"
 #include <string>
@@ -10,6 +10,10 @@
 namespace ssl {
 namespace protobuf {
 
+/**
+ * protobuf message `Referee`
+ * @see src/TeamControl/protobuf/ssl_gc_referee_message.proto
+ */
 class Referee {
     public:
         enum class StageType {
@@ -122,6 +126,10 @@ class Referee {
             float y;
         };
 
+        /**
+        * protobuf message `GameEvent`
+        * @see src/TeamControl/protobuf/ssl_gc_game_event.proto
+        */
         struct GameEvent {
             std::optional<std::string> id;
             std::optional<EventType> type;
@@ -210,4 +218,4 @@ class Referee {
 
 } // namespace protobuf
 } // namespace tc
-#endif // SSL_REFEREE_H__
+#endif // SSL_REFEREE_H_
