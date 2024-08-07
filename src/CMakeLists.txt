@@ -1,0 +1,7 @@
+add_subdirectory(protobuf)
+# add_subdirectory(SSL)
+add_subdirectory(TeamControl)
+add_executable(autoplayer main.cpp)
+target_link_libraries(autoplayer PUBLIC protobuf)
+target_link_libraries(autoplayer PRIVATE tc)
+# target_link_libraries(autoplayer PRIVATE ssl)

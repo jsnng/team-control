@@ -25,19 +25,16 @@ SSLReceiverBase::open_ssl_multicast_socket(
     // create a socket, issue ::setsockopt() for timeout/broadcasting
     // and bind it.
 
+    if(sockfd > 0) throw std::runtime_error("Error: socket already in use.");
     sockfd = ::socket(AF_INET, SOCK_DGRAM, 0);
-    if(sockfd < 0) {
-        throw std::runtime_error("Error opening socket.");
-    }
+    if(sockfd < 0) throw std::runtime_error("Error opening socket.");
 
     set_sock_timeout(1, 0);
     const int opt = 1;
-    if(::setsockopt(sockfd, SOL_SOCKET, SO_REUSEPORT, &opt, sizeof(int)) < 0) {
+    if(::setsockopt(sockfd, SOL_SOCKET, SO_REUSEPORT, &opt, sizeof(int)) < 0)
         throw std::runtime_error("Error setting socket SO_REUSEADDR option.");
-    }
-    if(::setsockopt(sockfd, SOL_SOCKET, SO_BROADCAST, &opt, sizeof(int)) < 0) {
+    if(::setsockopt(sockfd, SOL_SOCKET, SO_BROADCAST, &opt, sizeof(int)) < 0)
         throw std::runtime_error("Error setting socket SO_BROADCAST option.");
-    }
 
     ::memset(&ssl_socket_addr, 0, sizeof(ssl_socket_addr));
     ssl_socket_addr.sin_family = AF_INET;
@@ -87,7 +84,7 @@ SSLReceiverBase::receive_message() {
     ssize_t recv_bytes = recvfrom(sockfd, buffer, SSL_RECV_BUFFER_SIZE, 0, reinterpret_cast<sockaddr*>(&from_addr), &from_len);
     std::cerr << recv_bytes << std::endl;
     if(recv_bytes > SSL_RECV_BUFFER_SIZE) {
-        std::cerr << "Received packet too large";
+        std::cerr << "Error: Received packet too large" << std::endl;
         return std::nullopt;
     }
     if(recv_bytes > 0) {
@@ -105,7 +102,7 @@ SSLReceiverBase::receive_message() {
 
 SSLReceiverBase::~SSLReceiverBase() {
     if(sockfd == -1) {
-        std::cerr << "sockfd is invalid" << std::endl;
+        std::cerr << "Error: `sockfd` is invalid" << std::endl;
         return;
     }
     ::shutdown(sockfd, SHUT_RDWR);
@@ -115,16 +112,13 @@ SSLReceiverBase::~SSLReceiverBase() {
 /**
  * for testing purposes
  */
-int
-main(int argc, char * argv[]) {
-    // auto ssl_autoref_addr = SSLAutoRefReceiver::get_default_addr();
-    // SSLAutoRefReceiver ssl_autoref_recv(std::get<0>(ssl_autoref_addr), std::get<1>(ssl_autoref_addr));
-
-    auto ssl_grsim_addr = grSimVisionReceiver::get_default_addr();
-    grSimVisionReceiver ssl_grsim_recv(std::get<0>(ssl_grsim_addr), std::get<1>(ssl_grsim_addr));
-    while(true) {
-        auto message = ssl_grsim_recv.receive_message();
-        std::cerr << message.value() << std::endl;
-    }
-    return EXIT_SUCCESS;
-}
+// int
+// main(int argc, char * argv[]) {
+//     auto ssl_grsim_addr = grSimVisionReceiver::get_default_addr();
+//     grSimVisionReceiver ssl_grsim_recv(std::get<0>(ssl_grsim_addr), std::get<1>(ssl_grsim_addr));
+//     while(true) {
+//         auto message = ssl_grsim_recv.receive_message();
+//         std::cerr << message.value() << std::endl;
+//     }
+//     return EXIT_SUCCESS;
+// }

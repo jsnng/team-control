@@ -13,7 +13,7 @@
 #define SSL_RECV_BUFFER_SIZE 2048
 
 /**
- * base ssl multicast receiver for ssl
+ * base multicast receiver for ssl
  */
 class SSLReceiverBase {
     public:
@@ -68,13 +68,12 @@ class SSLVisionReceiver : public SSLReceiverBase {
     public:
         SSLVisionReceiver(std::string x, uint32_t y) : 
             SSLReceiverBase(x, y) {};
-        ~SSLVisionReceiver() = default;
         /**
          * returns the default addr for listening to vision-ssl
          * 
          * @returns tuple containing <std::string: ip addr, uint32_t:port>
          */
-        inline constexpr static std::tuple<std::string, uint32_t> 
+        inline static std::tuple<std::string, uint32_t> 
         get_default_addr() {
             std::string ssl_vision_ip_addr = "224.5.23.2";
             uint32_t ssl_vision_port = 10006;
@@ -92,7 +91,7 @@ class SSLAutoRefReceiver : public SSLReceiverBase {
          * 
          * @returns tuple containing <std::string: ip addr, uint32_t:port>
          */
-        inline constexpr static std::tuple<std::string, uint32_t> 
+        inline static std::tuple<std::string, uint32_t> 
         get_default_addr() {
             std::string ssl_autoref_ip_addr = "224.5.23.1";
             uint32_t ssl_autoref_port = 10003;
@@ -105,6 +104,7 @@ class grSimVisionReceiver : public SSLReceiverBase {
     public:
         grSimVisionReceiver(std::string x, uint32_t y) : 
             SSLReceiverBase(x, y) {};
+        // ~grSimVisionReceiver();
         /**
          * returns the default addr for listening to grSim mutlicast vision
          * 

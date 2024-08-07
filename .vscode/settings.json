@@ -55,7 +55,16 @@
         "variant": "cpp",
         "vector": "cpp",
         "algorithm": "cpp",
-        "exception": "cpp"
+        "exception": "cpp",
+        "charconv": "cpp",
+        "deque": "cpp",
+        "span": "cpp",
+        "__tree": "cpp",
+        "list": "cpp",
+        "map": "cpp",
+        "set": "cpp",
+        "unordered_set": "cpp",
+        "*.inc": "cpp"
     },
     
 }
