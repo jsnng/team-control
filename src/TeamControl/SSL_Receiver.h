@@ -14,7 +14,6 @@
 
 /**
  * base ssl multicast receiver for ssl
- * 
  */
 class SSLReceiverBase {
     public:
@@ -28,7 +27,6 @@ class SSLReceiverBase {
          */
         SSLReceiverBase(std::string group_ip_addr, uint32_t port);
         ~SSLReceiverBase();
-
         /**
          * listens to multicast on socket at descriptor `sockfd`
          * 
@@ -37,7 +35,17 @@ class SSLReceiverBase {
          * 
          */
         std::optional<std::string> receive_message();
-
+        /**
+         * sets the socket timeout option
+         * 
+         * @param in_seconds timeout time in seconds
+         * @param in_microseconds timeout time in microseconds
+         * @note setting `in_seconds` and `in_microseconds` to 0 results in no timeout
+         * 
+         * @returns true if socket timeout option are applied correctly
+         * @throws runtime_error if socket timeout options fail to apply
+         */
+        bool set_sock_timeout(uint32_t in_seconds, uint32_t in_microseconds);
     private:
         /**
          * sets up a socket to for listening to the mutlicast group
@@ -50,9 +58,10 @@ class SSLReceiverBase {
          * 
          * @todo change `group.imr_interface.s_addr` to `group_ip_addr` instead of `INADDR_ANY`
          */
-        bool set_ssl_multicast_socket(std::string group_ip_addr, uint32_t port);
-        struct sockaddr_in ssl_socket_addr;
-        int sockfd = -1;
+        bool open_ssl_multicast_socket(std::string group_ip_addr, uint32_t port);
+        struct sockaddr_in ssl_socket_addr; // for handling internet addresses
+        int sockfd = -1; // file descriptor that socket() returned
+
 };
 
 class SSLVisionReceiver : public SSLReceiverBase {
@@ -63,7 +72,7 @@ class SSLVisionReceiver : public SSLReceiverBase {
         /**
          * returns the default addr for listening to vision-ssl
          * 
-         * @returns tuple<string, uint32_t> a tuple consisting of the group ip addr and port
+         * @returns tuple containing <std::string: ip addr, uint32_t:port>
          */
         inline constexpr static std::tuple<std::string, uint32_t> 
         get_default_addr() {
@@ -81,7 +90,7 @@ class SSLAutoRefReceiver : public SSLReceiverBase {
         /**
          * returns the default addr for listening to autoref
          * 
-         * @returns tuple<string, uint32_t> a tuple consisting of the group ip addr and port
+         * @returns tuple containing <std::string: ip addr, uint32_t:port>
          */
         inline constexpr static std::tuple<std::string, uint32_t> 
         get_default_addr() {
@@ -99,7 +108,7 @@ class grSimVisionReceiver : public SSLReceiverBase {
         /**
          * returns the default addr for listening to grSim mutlicast vision
          * 
-         * @returns tuple<string, uint32_t> a tuple consisting of the group ip addr and port
+         * @returns tuple containing <std::string: ip addr, uint32_t:port>
          */
         inline constexpr static std::tuple<std::string, uint32_t> 
         get_default_addr() {

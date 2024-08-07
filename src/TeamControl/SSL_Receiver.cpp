@@ -12,13 +12,13 @@
 
 SSLReceiverBase::SSLReceiverBase(std::string group_ip_addr, uint32_t port) {
     std::cerr << "ip_addr: " << group_ip_addr << " port: " << port << std::endl;
-    if(!set_ssl_multicast_socket(group_ip_addr, port)) {
-        throw std::runtime_error("");
+    if(!open_ssl_multicast_socket(group_ip_addr, port)) {
+        throw std::runtime_error("Error opening socket.");
     }
 }
 
 bool
-SSLReceiverBase::set_ssl_multicast_socket(
+SSLReceiverBase::open_ssl_multicast_socket(
     std::string group_ip_addr,
     uint32_t port) {
 
@@ -30,14 +30,7 @@ SSLReceiverBase::set_ssl_multicast_socket(
         throw std::runtime_error("Error opening socket.");
     }
 
-    struct timeval timeout;
-    timeout.tv_sec = 1;
-    timeout.tv_usec = 0;
-
-    if(::setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeval)) < 0) {
-        throw std::runtime_error("Error setting socket SO_RCVTIMEO option.");
-    }
-
+    set_sock_timeout(1, 0);
     const int opt = 1;
     if(::setsockopt(sockfd, SOL_SOCKET, SO_REUSEPORT, &opt, sizeof(int)) < 0) {
         throw std::runtime_error("Error setting socket SO_REUSEADDR option.");
@@ -73,6 +66,18 @@ SSLReceiverBase::set_ssl_multicast_socket(
     return true;
 }
 
+bool
+SSLReceiverBase::set_sock_timeout(uint32_t in_seconds, uint32_t in_microseconds) {
+    struct timeval timeout;
+    timeout.tv_sec = in_seconds;
+    timeout.tv_usec = in_microseconds;
+    
+    if(::setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeval)) < 0) {
+        throw std::runtime_error("Error setting socket SO_RCVTIMEO option.");
+    }
+    return true;
+}
+
 std::optional<std::string>
 SSLReceiverBase::receive_message() {
     char buffer[SSL_RECV_BUFFER_SIZE];
@@ -88,11 +93,13 @@ SSLReceiverBase::receive_message() {
     if(recv_bytes > 0) {
         buffer[recv_bytes] = '\0';
         return std::string(buffer);
-    } 
+    }
+    #if defined(__APPLE__)
     else if(errno != EAGAIN) {
         std::cerr << "No message received. Error: " << strerror(errno) << std::endl;
         return std::nullopt;
     }
+    #endif 
     return std::nullopt;
 }
 
