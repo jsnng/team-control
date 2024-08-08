@@ -10,7 +10,18 @@
 
 #include <netinet/in.h>
 
-#define SSL_RECV_BUFFER_SIZE 2048
+// class Address {
+//     public:
+//         Address();
+//         ~Address();
+//         bool set_host(const char * ip_addr, uint32_t port);
+//         void set_any(int port);
+
+//         in_addr_t get_in_addr() const;
+//     private:
+//         sockaddr addr;
+//         socklen_t addr_len;
+// };
 
 /**
  * base multicast receiver for ssl
@@ -30,11 +41,13 @@ class SSLReceiverBase {
         /**
          * listens to multicast on socket at descriptor `sockfd`
          * 
-         * @see `SSL_RECV_BUFFER_SIZE` maximum size of recv buffer
-         * @returns std::optional<std::string> recieved messages from `sockfd` or std::nullopt
+         * @param buffer allocated memory to store packets
+         * @param length size of allocated memory
+         * 
+         * @returns int sizeof bits recievedfrom `sockfd` or std::nullopt
          * 
          */
-        std::optional<std::string> receive_message();
+        std::optional<int> recv(void* buffer, int length);
         /**
          * sets the socket timeout option
          * 

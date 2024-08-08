@@ -75,21 +75,19 @@ SSLReceiverBase::set_sock_timeout(uint32_t in_seconds, uint32_t in_microseconds)
     return true;
 }
 
-std::optional<std::string>
-SSLReceiverBase::receive_message() {
-    char buffer[SSL_RECV_BUFFER_SIZE];
+std::optional<int>
+SSLReceiverBase::recv(void* buffer, int size) {
     struct sockaddr_in from_addr;
     socklen_t from_len = sizeof(from_addr);
 
-    ssize_t recv_bytes = recvfrom(sockfd, buffer, SSL_RECV_BUFFER_SIZE, 0, reinterpret_cast<sockaddr*>(&from_addr), &from_len);
-    std::cerr << recv_bytes << std::endl;
-    if(recv_bytes > SSL_RECV_BUFFER_SIZE) {
+    ssize_t len = recvfrom(sockfd, buffer, size, 0, reinterpret_cast<sockaddr*>(&from_addr), &from_len);
+    std::cerr << len << std::endl;
+    if(len > size) {
         std::cerr << "Error: Received packet too large" << std::endl;
         return std::nullopt;
     }
-    if(recv_bytes > 0) {
-        buffer[recv_bytes] = '\0';
-        return std::string(buffer);
+    if(len > 0) {
+        return len;
     }
     #if defined(__APPLE__)
     else if(errno != EAGAIN) {

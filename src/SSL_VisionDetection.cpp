@@ -14,17 +14,15 @@ main(int argc, char * argv[]) {
     SSL_WrapperPacket new_ssl_wrapper_packet;
     auto ssl_grsim_addr = grSimVisionReceiver::get_default_addr();
     grSimVisionReceiver ssl_grsim_receiver(std::get<0>(ssl_grsim_addr), std::get<1>(ssl_grsim_addr));
-    // #pragma omp parallel if (n > limit) default (none) \
-    //     shared() private ()
     while(true) {
-        auto packet = ssl_grsim_receiver.receive_message();
-        if(packet.has_value()) {
-            // #pragma omp for nowait
-            auto input = packet.emplace();
-            new_ssl_wrapper_packet.ParseFromString(input);
+        uint32_t in_buffer_size = sizeof(char) * 65536;
+        void * in_buffer = new char[65536];
+        auto len = ssl_grsim_receiver.recv(&in_buffer, in_buffer_size);
+        if(len.has_value()) {
+            len.emplace();
+            new_ssl_wrapper_packet.ParseFromArray(in_buffer, len.value());
         }
-        // #pragma omp barrier
     }
     google::protobuf::ShutdownProtobufLibrary();
-    return EXIT_SUCCESS;
+    return 0;
 }   
