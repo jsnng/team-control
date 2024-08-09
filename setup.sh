@@ -7,3 +7,5 @@ cd protobuf
 git submodule update --init --recursive
 cmake . -DCMAKE_CXX_STANDARD=20
 cmake --build .
+
+git update-index --assume-unchanged .vscode/settings.json
