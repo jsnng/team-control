@@ -9,10 +9,11 @@ class WorldModel {
     public:
         WorldModel();
         ~WorldModel() = default;
-        
+        void from_ssl(std::string packet);
     private:
-        std::forward_list<SSL_DetectionFrame>* ssl_vision_detection_frames;
-        SSL_GeometryData* ssl_vision_geometry_data;
+        std::deque<SSL_DetectionFrame> detection; // doubly linked list for storing detection frames
+        SSL_GeometryData geometry; // current geometry data
+        SSL_WrapperPacket ssl_wrapperpacket;
 };
 
 #endif // WORLD_MODEL_H_

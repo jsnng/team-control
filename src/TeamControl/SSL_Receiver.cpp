@@ -25,7 +25,6 @@ SSLReceiverBase::ssl_multicast_socket(const std::string ip_addr, const std::stri
     // create a socket, issue ::setsockopt() for timeout/broadcasting
     // and bind it.
 
-    if(sockfd > 0) throw std::runtime_error("Error: socket already in use.");
     sockfd = ::socket(AF_INET, SOCK_DGRAM, 0);
     if(sockfd < 0) throw std::runtime_error("Error opening socket.");
 
@@ -39,7 +38,6 @@ SSLReceiverBase::ssl_multicast_socket(const std::string ip_addr, const std::stri
     set_ssl_sock_addr(port);
 
     if(::bind(sockfd, reinterpret_cast<sockaddr*>(&ssl_socket_addr), sizeof(sockaddr_in)) < 0) {
-        ::close(sockfd);
         throw std::runtime_error("Error binding to socket: ");
     }
     
@@ -49,12 +47,10 @@ SSLReceiverBase::ssl_multicast_socket(const std::string ip_addr, const std::stri
 
     struct ip_mreq group;
     if(::inet_pton(AF_INET, group_addr.c_str(), &(group.imr_multiaddr)) < 0) {
-        ::close(sockfd);
         throw std::runtime_error( "Error: group_ip_addr invalid.");
     }
     group.imr_interface.s_addr = INADDR_ANY;
     if(::setsockopt(sockfd, IPPROTO_IP, IP_ADD_MEMBERSHIP, &group, sizeof(ip_mreq)) < 0) {
-        ::close(sockfd);
         throw std::runtime_error("Error setting socket to IP_ADD_MEMBERSHIP option.");
     }
 }
@@ -89,10 +85,8 @@ SSLReceiverBase::receive_ssl_vision() {
     size_t buf_size = sizeof(char) * SSL_RECV_BUFFER_SIZE;
     struct sockaddr_in from_addr;
     socklen_t from_len = sizeof(from_addr);
-
     ssize_t recv_bytes = recvfrom(sockfd, buffer, buf_size, 0, 
         reinterpret_cast<sockaddr*>(&from_addr), &from_len);
-    std::cerr << recv_bytes << std::endl;
     if(recv_bytes > buf_size) {
         std::cerr << "Error: Received packet too large" << std::endl;
         return std::nullopt;
