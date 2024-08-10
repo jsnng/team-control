@@ -9,6 +9,7 @@
 #include <netdb.h>
 
 #include <netinet/in.h>
+
 class UDP {
    public:
         UDP()=default;
@@ -58,11 +59,8 @@ class UDP {
         bool set_sockaddr_in(std::string ip_addr, uint32_t port);
         bool set_sockaddr_in(char* ip_addr, uint32_t port);
         bool set_sockaddr_in(in_addr_t ip_addr, uint32_t port);
-        inline bool bind_mutlicast_socket() {
-                if(::bind(sockfd, reinterpret_cast<sockaddr*>(&addr), sizeof(sockaddr_in)) < 0) {
-                ::close(sockfd);
-                throw std::runtime_error("Error binding to socket: ");
-            }
+        inline void bind_mutlicast_socket() {
+            ::bind(sockfd, reinterpret_cast<sockaddr*>(&addr), sizeof(sockaddr_in));
         }
         /**
          * joins specified mutlicast group

@@ -8,9 +8,7 @@
  */
 class SSLReceiverBase : public UDP {
     public:
-        SSLReceiverBase(const std::string x, const uint32_t y) :
-            UDP() {};
-        ~SSLReceiverBase();
+        SSLReceiverBase(const std::string x, const uint32_t y);
     private:
 };
 

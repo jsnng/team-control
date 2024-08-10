@@ -8,11 +8,8 @@
  */
 class SSLSenderBase : public UDP {
     public:
-        SSLSenderBase(const std::string x, const uint32_t y) :
-            UDP() {};
-        ~SSLSenderBase();
+        SSLSenderBase(const std::string x, const uint32_t y);
     private:
-
 };
 
 class SSLVisionSender : public SSLSenderBase {

@@ -74,12 +74,10 @@ UDP::join_mutlicast_group(std::string group_ip_addr) {
 
     struct ip_mreq group;
     if(::inet_pton(AF_INET, group_ip_addr.c_str(), &(group.imr_multiaddr)) < 0) {
-        ::close(sockfd);
         throw std::runtime_error( "Error: group_ip_addr invalid.");
     }
     group.imr_interface.s_addr = INADDR_ANY;
     if(::setsockopt(sockfd, IPPROTO_IP, IP_ADD_MEMBERSHIP, &group, sizeof(ip_mreq)) < 0) {
-        ::close(sockfd);
         throw std::runtime_error("Error setting socket to IP_ADD_MEMBERSHIP option.");
     }
     return true;
@@ -99,11 +97,9 @@ UDP::set_sock_timeout(uint32_t in_seconds, uint32_t in_microseconds) {
 
 std::optional<int>
 UDP::recv(void* buffer, int size) const {
-    struct sockaddr_in from_addr;
+    struct sockaddr_in* from_addr;
     socklen_t from_len = sizeof(from_addr);
-
-    std::cout << sizeof(buffer) << "\n";
-
+    std::cout << "sizeof(buffer)" << sizeof(buffer) << "\n";
     auto recvbytes = recvfrom(sockfd, buffer, size, 0, reinterpret_cast<sockaddr*>(&from_addr), &from_len);
     std::cerr << recvbytes << std::endl;
     if(recvbytes > size) {
