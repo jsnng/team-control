@@ -25,7 +25,7 @@ class SSLReceiverBase {
          * @throws runtime_error @see SSLReceiverBase::set_ssl_multicast_socket()
          * 
          */
-        SSLReceiverBase(std::string group_ip_addr, uint32_t port);
+        SSLReceiverBase(std::string const ip_addr, const std::string group_addr, const uint32_t port);
         ~SSLReceiverBase();
         /**
          * listens to multicast on socket at descriptor `sockfd`
@@ -34,7 +34,7 @@ class SSLReceiverBase {
          * @returns std::optional<std::string> recieved messages from `sockfd` or std::nullopt
          * 
          */
-        std::optional<std::string> receive_message();
+        std::optional<std::string> receive_ssl_vision();
         /**
          * sets the socket timeout option
          * 
@@ -42,81 +42,46 @@ class SSLReceiverBase {
          * @param in_microseconds timeout time in microseconds
          * @note setting `in_seconds` and `in_microseconds` to 0 results in no timeout
          * 
-         * @returns true if socket timeout option are applied correctly
          * @throws runtime_error if socket timeout options fail to apply
          */
-        bool set_sock_timeout(uint32_t in_seconds, uint32_t in_microseconds);
-    private:
+        void set_sock_timeout(const uint32_t in_seconds, const uint32_t in_microseconds);
         /**
          * sets up a socket to for listening to the mutlicast group
          * 
          * @param group_ip_addr mutlicast group ip addr
          * @param port mutlicast group port
          * 
-         * @returns true if socket is set up successfully
          * @throws runtime_error if socket setup fails
          * 
          * @todo change `group.imr_interface.s_addr` to `group_ip_addr` instead of `INADDR_ANY`
          */
-        bool open_ssl_multicast_socket(std::string group_ip_addr, uint32_t port);
+        void ssl_multicast_socket(const std::string ip_addr, const std::string group_addr, const uint32_t port);
+        void set_ssl_sock_addr(const uint32_t port);
+    protected:
         struct sockaddr_in ssl_socket_addr; // for handling internet addresses
         int sockfd = -1; // file descriptor that socket() returned
-
 };
 
 class SSLVisionReceiver : public SSLReceiverBase {
     public:
-        SSLVisionReceiver(std::string x, uint32_t y) : 
-            SSLReceiverBase(x, y) {};
-        /**
-         * returns the default addr for listening to vision-ssl
-         * 
-         * @returns tuple containing <std::string: ip addr, uint32_t:port>
-         */
-        inline static std::tuple<std::string, uint32_t> 
-        get_default_addr() {
-            std::string ssl_vision_ip_addr = "224.5.23.2";
-            uint32_t ssl_vision_port = 10006;
-            return std::make_tuple(ssl_vision_ip_addr, ssl_vision_port);
-        }
+        SSLVisionReceiver(const std::string x = "0.0.0.0", const std::string y = "224.5.23.2", 
+                const uint32_t z = 10006) : 
+            SSLReceiverBase(x, y, z) {};
     private:
 };
 
 class SSLAutoRefReceiver : public SSLReceiverBase {
     public:
-        SSLAutoRefReceiver(std::string x, uint32_t y) : 
-            SSLReceiverBase(x, y) {};
-        /**
-         * returns the default addr for listening to autoref
-         * 
-         * @returns tuple containing <std::string: ip addr, uint32_t:port>
-         */
-        inline static std::tuple<std::string, uint32_t> 
-        get_default_addr() {
-            std::string ssl_autoref_ip_addr = "224.5.23.1";
-            uint32_t ssl_autoref_port = 10003;
-            return std::make_tuple(ssl_autoref_ip_addr, ssl_autoref_port);
-        }
-    private:
+        SSLAutoRefReceiver(const std::string x = "", const std::string y = "224.5.23.1", 
+                const uint32_t z = 10003) : 
+            SSLReceiverBase(x, y, z) {};
 };
 
 class grSimVisionReceiver : public SSLReceiverBase {
     public:
-        grSimVisionReceiver(std::string x, uint32_t y) : 
-            SSLReceiverBase(x, y) {};
-        // ~grSimVisionReceiver();
-        /**
-         * returns the default addr for listening to grSim mutlicast vision
-         * 
-         * @returns tuple containing <std::string: ip addr, uint32_t:port>
-         */
-        inline constexpr static std::tuple<std::string, uint32_t> 
-        get_default_addr() {
-            std::string ssl_grsim_ip_addr = "224.5.23.2";
-            uint32_t ssl_grsim_port = 10020;
-            return std::make_tuple(ssl_grsim_ip_addr, ssl_grsim_port);
-        }
-    private:   
+        grSimVisionReceiver(const std::string x = "0.0.0.0", const std::string y = "224.5.23.2", 
+                const uint32_t z = 10020) : 
+            SSLReceiverBase(x, y, z) {};
 };
 
 #endif //SSL_RECEIVER_H_

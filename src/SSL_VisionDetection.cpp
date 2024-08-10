@@ -4,6 +4,7 @@
 #include "ssl_vision_wrapper.pb.h"
 
 #include "TeamControl/SSL_Receiver.h"
+#include "TeamControl/World_Model.h"
 
 /**
  * for testing purposes
@@ -12,19 +13,20 @@ int
 main(int argc, char * argv[]) {
     using namespace std;
     SSL_WrapperPacket new_ssl_wrapper_packet;
-    auto ssl_grsim_addr = grSimVisionReceiver::get_default_addr();
-    grSimVisionReceiver ssl_grsim_receiver(std::get<0>(ssl_grsim_addr), std::get<1>(ssl_grsim_addr));
-    // #pragma omp parallel if (n > limit) default (none) \
+    grSimVisionReceiver ssl_grsim_receiver;
+    // #pragma omp parallel if (n > limit) default (none) 
     //     shared() private ()
     while(true) {
-        auto packet = ssl_grsim_receiver.receive_message();
+        auto packet = ssl_grsim_receiver.receive_ssl_vision();
         if(packet.has_value()) {
             // #pragma omp for nowait
-            auto input = packet.emplace();
-            new_ssl_wrapper_packet.ParseFromString(input);
+            // std::cout << packet.value() << '\n';
+            new_ssl_wrapper_packet.ParseFromString(packet.value());
+
+            std::cout << new_ssl_wrapper_packet.DebugString() << '\n';
         }
         // #pragma omp barrier
     }
     google::protobuf::ShutdownProtobufLibrary();
-    return EXIT_SUCCESS;
+    return 0;
 }   

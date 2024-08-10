@@ -10,18 +10,18 @@
 #include <fcntl.h>
 #endif
 
-SSLReceiverBase::SSLReceiverBase(std::string group_ip_addr, uint32_t port) {
-    std::cerr << "ip_addr: " << group_ip_addr << " port: " << port << std::endl;
-    if(!open_ssl_multicast_socket(group_ip_addr, port)) {
-        throw std::runtime_error("Error opening socket.");
-    }
+SSLReceiverBase::SSLReceiverBase(const std::string ip_addr,  const std::string group_addr, 
+        const uint32_t port) {
+    std::cerr << "SSLReceiverBase::SSLReceiverBase was called\n";
+    std::cerr << "ip_addr: " << group_addr << " port: " << port << "\n";
+    ssl_multicast_socket(ip_addr, group_addr, port);
 }
 
-bool
-SSLReceiverBase::open_ssl_multicast_socket(
-    std::string group_ip_addr,
-    uint32_t port) {
+void
+SSLReceiverBase::ssl_multicast_socket(const std::string ip_addr, const std::string group_addr, 
+        const uint32_t port) {
 
+    std::cerr << "SSLReceiverBase::ssl_multicast_socket was called\n";
     // create a socket, issue ::setsockopt() for timeout/broadcasting
     // and bind it.
 
@@ -36,10 +36,7 @@ SSLReceiverBase::open_ssl_multicast_socket(
     if(::setsockopt(sockfd, SOL_SOCKET, SO_BROADCAST, &opt, sizeof(int)) < 0)
         throw std::runtime_error("Error setting socket SO_BROADCAST option.");
 
-    ::memset(&ssl_socket_addr, 0, sizeof(ssl_socket_addr));
-    ssl_socket_addr.sin_family = AF_INET;
-    ssl_socket_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-    ssl_socket_addr.sin_port = htons(port);
+    set_ssl_sock_addr(port);
 
     if(::bind(sockfd, reinterpret_cast<sockaddr*>(&ssl_socket_addr), sizeof(sockaddr_in)) < 0) {
         ::close(sockfd);
@@ -51,7 +48,7 @@ SSLReceiverBase::open_ssl_multicast_socket(
     // struct `ip_mreq` has two forms for IP_ADD_MEMBERSHIP.
 
     struct ip_mreq group;
-    if(::inet_pton(AF_INET, group_ip_addr.c_str(), &(group.imr_multiaddr)) < 0) {
+    if(::inet_pton(AF_INET, group_addr.c_str(), &(group.imr_multiaddr)) < 0) {
         ::close(sockfd);
         throw std::runtime_error( "Error: group_ip_addr invalid.");
     }
@@ -60,30 +57,43 @@ SSLReceiverBase::open_ssl_multicast_socket(
         ::close(sockfd);
         throw std::runtime_error("Error setting socket to IP_ADD_MEMBERSHIP option.");
     }
-    return true;
 }
 
-bool
-SSLReceiverBase::set_sock_timeout(uint32_t in_seconds, uint32_t in_microseconds) {
+void SSLReceiverBase::set_ssl_sock_addr(const uint32_t port) {
+    std::cerr << "SSLReceiverBase::set_ssl_sock_addr was called\n";
+
+    ::memset(&ssl_socket_addr, 0, sizeof(ssl_socket_addr));
+    ssl_socket_addr.sin_family = AF_INET;
+    ssl_socket_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    // inet_pton(AF_INET, ip_addr.c_str(), &(ssl_socket_addr.sin_addr));
+    ssl_socket_addr.sin_port = htons(port);
+}
+
+void
+SSLReceiverBase::set_sock_timeout(const uint32_t in_seconds, 
+    const uint32_t in_microseconds) {
+    std::cerr << "SSLReceiverBase::set_sock_timeout was called\n";
     struct timeval timeout;
     timeout.tv_sec = in_seconds;
     timeout.tv_usec = in_microseconds;
     
-    if(::setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeval)) < 0) {
+    if(::setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &timeout, 
+        sizeof(timeval)) < 0) {
         throw std::runtime_error("Error setting socket SO_RCVTIMEO option.");
     }
-    return true;
 }
 
 std::optional<std::string>
-SSLReceiverBase::receive_message() {
+SSLReceiverBase::receive_ssl_vision() {
     char buffer[SSL_RECV_BUFFER_SIZE];
+    size_t buf_size = sizeof(char) * SSL_RECV_BUFFER_SIZE;
     struct sockaddr_in from_addr;
     socklen_t from_len = sizeof(from_addr);
 
-    ssize_t recv_bytes = recvfrom(sockfd, buffer, SSL_RECV_BUFFER_SIZE, 0, reinterpret_cast<sockaddr*>(&from_addr), &from_len);
+    ssize_t recv_bytes = recvfrom(sockfd, buffer, buf_size, 0, 
+        reinterpret_cast<sockaddr*>(&from_addr), &from_len);
     std::cerr << recv_bytes << std::endl;
-    if(recv_bytes > SSL_RECV_BUFFER_SIZE) {
+    if(recv_bytes > buf_size) {
         std::cerr << "Error: Received packet too large" << std::endl;
         return std::nullopt;
     }
@@ -93,7 +103,8 @@ SSLReceiverBase::receive_message() {
     }
     #if defined(__APPLE__)
     else if(errno != EAGAIN) {
-        std::cerr << "No message received. Error: " << strerror(errno) << std::endl;
+        std::cerr << "No message received. Error: " << 
+            strerror(errno) << std::endl;
         return std::nullopt;
     }
     #endif 
@@ -101,6 +112,7 @@ SSLReceiverBase::receive_message() {
 }
 
 SSLReceiverBase::~SSLReceiverBase() {
+    std::cerr << "SSLReceiverBase::~SSLReceiverBase was called\n";
     if(sockfd == -1) {
         std::cerr << "Error: `sockfd` is invalid" << std::endl;
         return;

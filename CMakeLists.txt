@@ -1,15 +1,10 @@
 cmake_minimum_required(VERSION 3.30.1)
-project(team-control)
+project(team-control LANGUAGES CXX)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+add_compile_options(
+"$<$<COMPILE_LANGUAGE:CXX>:-std=c++20;-g;>"
+)
 set(CMAKE_CXX_STANDARD 20)
 set(CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_FLAGS "-Wall")
-# if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-# endif()
-set(CFLAGS_DEBUG "-g")
-# if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
-# endif()
-set(CMAKE_CXX_FLAGS_DEBUG "${CFLAGS_DEBUG}")
-# set(CMAKE_CXX_FLAGS_DEBUG "-g -Wl, --no-as-needed")
-# set(CMAKE_CXX_FLAGS_RELEASE "-DNDEBUG -march=native -Wl, --no-as-needed")
 add_subdirectory(src)
