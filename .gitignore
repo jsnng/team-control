@@ -3,3 +3,7 @@
 *.egg-info/
 
 build/
+
+bin/
+lib/
+pyvenv.cfg
