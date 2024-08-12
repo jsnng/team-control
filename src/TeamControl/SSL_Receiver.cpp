@@ -2,28 +2,41 @@
 
 #include <iostream>
 #include <cstring>
-#include <arpa/inet.h>
 #include <unistd.h>
 #include <stdexcept>
-
+#ifdef _WIN32
+#include <winsock2.h>
+#endif
 #if defined(__unix__) || defined(__APPLE__)
+#include <sys/socket.h>
+#include <arpa/inet.h>
 #include <fcntl.h>
+#include <netinet/in.h>
 #endif
 
-SSLReceiverBase::SSLReceiverBase(const std::string ip_addr,  const std::string group_addr, 
+
+SSLReceiverBase::SSLReceiverBase(std::string_view ip_addr,  std::string_view group_addr, 
         const uint32_t port) {
     std::cerr << "SSLReceiverBase::SSLReceiverBase was called\n";
-    std::cerr << "ip_addr: " << group_addr << " port: " << port << "\n";
+    std::cerr << "ip_addr: " << ip_addr << " group_addr: " << group_addr << " port: " << port << "\n";
     ssl_multicast_socket(ip_addr, group_addr, port);
 }
 
 void
-SSLReceiverBase::ssl_multicast_socket(const std::string ip_addr, const std::string group_addr, 
+SSLReceiverBase::ssl_multicast_socket(std::string_view ip_addr, std::string_view group_addr, 
         const uint32_t port) {
 
     std::cerr << "SSLReceiverBase::ssl_multicast_socket was called\n";
     // create a socket, issue ::setsockopt() for timeout/broadcasting
     // and bind it.
+
+    #ifdef _WIN32
+    WSADATA wsaData;
+    if(WSASetup(0x0101, &wsaData)) {
+        throw std::runtime_error("WSASetup failed.");
+        return -1;
+    }
+    #endif
 
     sockfd = ::socket(AF_INET, SOCK_DGRAM, 0);
     if(sockfd < 0) throw std::runtime_error("Error opening socket.");
@@ -34,11 +47,13 @@ SSLReceiverBase::ssl_multicast_socket(const std::string ip_addr, const std::stri
         throw std::runtime_error("Error setting socket SO_REUSEADDR option.");
     if(::setsockopt(sockfd, SOL_SOCKET, SO_BROADCAST, &opt, sizeof(int)) < 0)
         throw std::runtime_error("Error setting socket SO_BROADCAST option.");
+    // if(::setsockopt(sockfd, IPPROTO_IPV4, IP_PKTINFO, &opt, sizeof(int)) < 0)
+    //     throw std::runtime_error("Error setting socket IP_PKTINFO option.");
 
     set_ssl_sock_addr(port);
 
-    if(::bind(sockfd, reinterpret_cast<sockaddr*>(&ssl_socket_addr), sizeof(sockaddr_in)) < 0) {
-        throw std::runtime_error("Error binding to socket: ");
+    if(::connect(sockfd, reinterpret_cast<sockaddr*>(&ssl_socket_addr), sizeof(sockaddr_in)) < 0) {
+        throw std::runtime_error("Error: ::connect call failed for socket");
     }
     
     // mutlicast join operation by issuing ::setsockopt().
@@ -46,7 +61,7 @@ SSLReceiverBase::ssl_multicast_socket(const std::string ip_addr, const std::stri
     // struct `ip_mreq` has two forms for IP_ADD_MEMBERSHIP.
 
     struct ip_mreq group;
-    if(::inet_pton(AF_INET, group_addr.c_str(), &(group.imr_multiaddr)) < 0) {
+    if(::inet_pton(AF_INET, std::string(group_addr).c_str(), &(group.imr_multiaddr)) < 0) {
         throw std::runtime_error( "Error: group_ip_addr invalid.");
     }
     group.imr_interface.s_addr = INADDR_ANY;
@@ -57,6 +72,8 @@ SSLReceiverBase::ssl_multicast_socket(const std::string ip_addr, const std::stri
 
 void SSLReceiverBase::set_ssl_sock_addr(const uint32_t port) {
     std::cerr << "SSLReceiverBase::set_ssl_sock_addr was called\n";
+
+    // refer to linux ip documentation (see man ip 3)
 
     ::memset(&ssl_socket_addr, 0, sizeof(ssl_socket_addr));
     ssl_socket_addr.sin_family = AF_INET;
@@ -82,7 +99,7 @@ SSLReceiverBase::set_sock_timeout(const uint32_t in_seconds,
 std::optional<std::string>
 SSLReceiverBase::receive_ssl_vision() {
     char buffer[SSL_RECV_BUFFER_SIZE];
-    size_t buf_size = sizeof(char) * SSL_RECV_BUFFER_SIZE;
+    ssize_t buf_size = sizeof(char) * SSL_RECV_BUFFER_SIZE;
     struct sockaddr_in from_addr;
     socklen_t from_len = sizeof(from_addr);
     ssize_t recv_bytes = recvfrom(sockfd, buffer, buf_size, 0, 
@@ -91,7 +108,7 @@ SSLReceiverBase::receive_ssl_vision() {
         std::cerr << "Error: Received packet too large" << std::endl;
         return std::nullopt;
     }
-    if(recv_bytes > 0) {
+    if(recv_bytes > 0) [[ likely ]] {
         buffer[recv_bytes] = '\0';
         return std::string(buffer);
     }
@@ -111,6 +128,9 @@ SSLReceiverBase::~SSLReceiverBase() {
         std::cerr << "Error: `sockfd` is invalid" << std::endl;
         return;
     }
+    #ifdef _WIN32
+        WSACleanup();
+    #endif
     ::shutdown(sockfd, SHUT_RDWR);
     ::close(sockfd);
 }
@@ -121,7 +141,8 @@ SSLReceiverBase::~SSLReceiverBase() {
 // int
 // main(int argc, char * argv[]) {
 //     auto ssl_grsim_addr = grSimVisionReceiver::get_default_addr();
-//     grSimVisionReceiver ssl_grsim_recv(std::get<0>(ssl_grsim_addr), std::get<1>(ssl_grsim_addr));
+//     grSimVisionReceiver ssl_grsim_recv(std::get<0>(ssl_grsim_addr), 
+//          std::get<1>(ssl_grsim_addr));
 //     while(true) {
 //         auto message = ssl_grsim_recv.receive_message();
 //         std::cerr << message.value() << std::endl;

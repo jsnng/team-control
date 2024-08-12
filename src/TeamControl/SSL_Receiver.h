@@ -8,8 +8,6 @@
 #include <functional>
 #include <netdb.h>
 
-#include <netinet/in.h>
-
 #define SSL_RECV_BUFFER_SIZE 2048
 
 /**
@@ -25,7 +23,7 @@ class SSLReceiverBase {
          * @throws runtime_error @see SSLReceiverBase::set_ssl_multicast_socket()
          * 
          */
-        SSLReceiverBase(std::string const ip_addr, const std::string group_addr, const uint32_t port);
+        SSLReceiverBase(std::string_view ip_addr, std::string_view group_addr, const uint32_t port);
         ~SSLReceiverBase();
         /**
          * listens to multicast on socket at descriptor `sockfd`
@@ -55,16 +53,23 @@ class SSLReceiverBase {
          * 
          * @todo change `group.imr_interface.s_addr` to `group_ip_addr` instead of `INADDR_ANY`
          */
-        void ssl_multicast_socket(const std::string ip_addr, const std::string group_addr, const uint32_t port);
+        void ssl_multicast_socket(std::string_view ip_addr, std::string_view group_addr, const uint32_t port);
+        /**
+         * setup `ssl_socket_addr`
+         * @param port mutlicast group port to listen to
+         */
         void set_ssl_sock_addr(const uint32_t port);
-    protected:
+        inline int get_sockfd() const {
+            return sockfd;
+        }
+    private:
         struct sockaddr_in ssl_socket_addr; // for handling internet addresses
         int sockfd = -1; // file descriptor that socket() returned
 };
 
 class SSLVisionReceiver : public SSLReceiverBase {
     public:
-        SSLVisionReceiver(const std::string x = "0.0.0.0", const std::string y = "224.5.23.2", 
+        SSLVisionReceiver(std::string_view x = "0.0.0.0", std::string_view y = "224.5.23.2", 
                 const uint32_t z = 10006) : 
             SSLReceiverBase(x, y, z) {};
     private:
@@ -72,14 +77,14 @@ class SSLVisionReceiver : public SSLReceiverBase {
 
 class SSLAutoRefReceiver : public SSLReceiverBase {
     public:
-        SSLAutoRefReceiver(const std::string x = "", const std::string y = "224.5.23.1", 
+        SSLAutoRefReceiver(std::string_view x = "0.0.0.0", std::string_view y = "224.5.23.1", 
                 const uint32_t z = 10003) : 
             SSLReceiverBase(x, y, z) {};
 };
 
 class grSimVisionReceiver : public SSLReceiverBase {
     public:
-        grSimVisionReceiver(const std::string x = "0.0.0.0", const std::string y = "224.5.23.2", 
+        grSimVisionReceiver(std::string_view x = "0.0.0.0", std::string_view y = "224.5.23.2", 
                 const uint32_t z = 10020) : 
             SSLReceiverBase(x, y, z) {};
 };
