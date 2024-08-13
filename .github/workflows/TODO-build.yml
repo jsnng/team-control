@@ -1,0 +1,28 @@
+name: build
+
+on: workflow_dispatch
+
+jobs:
+  build:
+    name: TODO-build
+    runs-on: self-hosted
+    strategy:
+      fail-fast: false
+      matrix: 
+        config:
+          - {
+              name: "MSVC", artifact: "WIN-MSVC.tar.xz",
+              os: windows-lastest,
+              cc: "cl",
+              cxx: "cl",
+              environment_script: "C:/Program Files(x86)/Miscrosoft Visual Studio/2022/BuildTools/VC/Build/vcvars64.bat"
+            }
+    steps:
+    - uses: actions/checkout@v4
+    - name: tc
+      id: tc
+      run: |
+        mkdir build/
+        cd build/
+        cmake ../ -DCMAKE_PREFIX_PATH="C:/vcpkg/packages/protobuf_x64-windows" -Dprotobuf_BUILD_SHARED_LIBS=ON
+        cmake --build . --clean-first

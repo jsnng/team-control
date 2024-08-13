@@ -5,4 +5,4 @@ set (SRCS
 )
 
 add_library(tc ${SRCS})
-target_link_libraries(tc PUBLIC protobuf)
+target_link_libraries(tc PUBLIC ssl_protobuf)

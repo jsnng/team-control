@@ -1,6 +1,10 @@
-# get_filename_component(protobuf_dir ${CMAKE_CURRENT_LIST_FILE} PATH)
-
-find_package(protobuf CONFIG REQUIRED)
+if(WIN32)
+    set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
+    include(FindProtobuf)
+    find_package(Protobuf REQUIRED)
+else()
+    find_package(Protobuf CONFIG REQUIRED)
+endif()
 
 set (PROTO_FILES
     ssl_gc_common.proto
@@ -11,13 +15,13 @@ set (PROTO_FILES
     ssl_vision_geometry.proto
     ssl_vision_wrapper.proto
 )
-add_library(protobuf ${PROTO_FILES})
-target_include_directories(protobuf INTERFACE ${CMAKE_CURRENT_BINARY_DIR})
+add_library(ssl_protobuf ${PROTO_FILES})
+target_include_directories(ssl_protobuf INTERFACE ${CMAKE_CURRENT_BINARY_DIR})
 
-target_link_libraries(protobuf
+target_link_libraries(ssl_protobuf
     PUBLIC
         protobuf::libprotobuf
         protobuf::libprotoc
 )
 # protobuf_generate_cpp(TARGET protobuf LANGUAGE cpp)
-protobuf_generate(TARGET protobuf)
+protobuf_generate(TARGET ssl_protobuf)
