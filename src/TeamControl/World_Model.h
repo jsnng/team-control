@@ -3,9 +3,8 @@
 
 #include "ssl_vision_wrapper.pb.h"
 #include "ssl_vision_detection.pb.h"
-#include "State.h"
-#include <deque>
 
+#include <deque>
 
 // class Robot {
 //     float confidence;
@@ -20,20 +19,6 @@
 //     inline float get_x() const { return x; }
 //     inline float get_y() const { return y; }
 //     void from_ssl(const SSL_DetectionRobot& detection_robot);
-// };
-
-// class Ball {
-//     float confidence;
-//     float x;
-//     float y;
-//     std::optional<float> z;
-//     public:
-//     Ball(const float confidence, const float x, const float y, const std::optional<float> z);
-//     ~Ball();
-//     inline float get_x() const { return x; }
-//     inline float get_y() const { return y; }
-//     inline float get_z() const noexcept { z.has_value() ? z.value() : float(0); }
-//     void from_ssl(const SSL_DetectionRobot&  detection_robot);
 // };
 
 class WorldModel {
