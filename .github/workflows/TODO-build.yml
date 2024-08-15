@@ -1,4 +1,4 @@
-name: build
+name: compile-team-control
 
 on: workflow_dispatch
 
@@ -24,5 +24,5 @@ jobs:
       run: |
         mkdir build/
         cd build/
-        cmake ../ -DCMAKE_PREFIX_PATH="C:/vcpkg/packages/protobuf_x64-windows" -Dprotobuf_BUILD_SHARED_LIBS=ON
+        cmake ../ -DCMAKE_PREFIX_PATH="C:/vcpkg/packages/protobuf_x64-windows;C:/vcpkg/packages/abseil_x64-windows"
         cmake --build . --clean-first

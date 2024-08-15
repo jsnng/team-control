@@ -1,10 +1,8 @@
 if(WIN32)
     set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
-    include(FindProtobuf)
-    find_package(Protobuf REQUIRED)
-else()
-    find_package(Protobuf CONFIG REQUIRED)
 endif()
+
+find_package(Protobuf CONFIG REQUIRED)
 
 set (PROTO_FILES
     ssl_gc_common.proto
