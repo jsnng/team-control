@@ -1,10 +1,9 @@
-name: compile-team-control
+name: build-TC
 
-on: workflow_dispatch
+on: push
 
 jobs:
   build:
-    name: TODO-build
     runs-on: self-hosted
     strategy:
       fail-fast: false

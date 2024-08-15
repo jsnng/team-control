@@ -2,18 +2,7 @@
 
 #include <iostream>
 #include <cstring>
-#include <unistd.h>
 #include <stdexcept>
-#ifdef _WIN32
-#include <winsock2.h>
-#endif
-#if defined(__unix__) || defined(__APPLE__)
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <fcntl.h>
-#include <netinet/in.h>
-#endif
-
 
 SSLReceiverBase::SSLReceiverBase(std::string_view ip_addr,  std::string_view group_addr, 
         const uint32_t port) {
@@ -32,6 +21,7 @@ SSLReceiverBase::ssl_multicast_socket(std::string_view ip_addr, std::string_view
 
     #ifdef _WIN32
     WSADATA wsaData;
+
     if(WSASetup(0x0101, &wsaData)) {
         throw std::runtime_error("WSASetup failed.");
         return -1;
@@ -73,9 +63,12 @@ SSLReceiverBase::ssl_multicast_socket(std::string_view ip_addr, std::string_view
 void SSLReceiverBase::set_ssl_sock_addr(const uint32_t port) {
     std::cerr << "SSLReceiverBase::set_ssl_sock_addr was called\n";
 
+    #ifdef _WIN32
+    ZeroMemory(&ssl_socket_addr, 0, sizeof(ssl_socket_addr));
+    #else
     // refer to linux ip documentation (see man ip 3)
-
     ::memset(&ssl_socket_addr, 0, sizeof(ssl_socket_addr));
+    #endif
     ssl_socket_addr.sin_family = AF_INET;
     ssl_socket_addr.sin_addr.s_addr = htonl(INADDR_ANY);
     // inet_pton(AF_INET, ip_addr.c_str(), &(ssl_socket_addr.sin_addr));
@@ -112,6 +105,9 @@ SSLReceiverBase::receive_ssl_vision() {
         buffer[recv_bytes] = '\0';
         return std::string(buffer);
     }
+    #ifdef _WIN32
+    else if(errno!)
+    #endif
     #if defined(__APPLE__)
     else if(errno != EAGAIN) {
         std::cerr << "No message received. Error: " << 
@@ -129,10 +125,12 @@ SSLReceiverBase::~SSLReceiverBase() {
         return;
     }
     #ifdef _WIN32
-        WSACleanup();
-    #endif
+    closesocket(sockfd);
+    WSACleanup();
+    #else
     ::shutdown(sockfd, SHUT_RDWR);
     ::close(sockfd);
+    #endif
 }
 
 /**

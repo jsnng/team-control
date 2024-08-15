@@ -1,12 +1,38 @@
 #ifndef SSL_RECEIVER_H_
 #define SSL_RECEIVER_H_
 
+#ifdef _WIN32
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#endif
+
 #include <string>
 #include <vector>
 #include <optional>
 #include <tuple>
 #include <functional>
+
+#ifdef _WIN32
+#include <windows.h>
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#include <iphlpapi.h>
+#endif
+#if defined(__unix__) || defined(__APPLE__)
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <fcntl.h>
+#include <netinet/in.h>
 #include <netdb.h>
+#include <unistd.h>
+#endif
+
+#ifdef _WIN32
+#pragma comment (lib, "Ws2_32.lib")
+#pragma comment (lib, "Mswsock.lib")
+#pragma comment (lib, "AdvApi32.lib")
+#endif
 
 #define SSL_RECV_BUFFER_SIZE 2048
 
