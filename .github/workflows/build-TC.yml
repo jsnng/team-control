@@ -16,6 +16,18 @@ jobs:
               cxx: "cl",
               environment_script: "C:/Program Files(x86)/Miscrosoft Visual Studio/2022/BuildTools/VC/Build/vcvars64.bat"
             }
+          - {
+              name: "clang",
+              os: "macos-lateset",
+              cc: "clang",
+              cxx: "clang++",
+            }
+          - {
+              name: "gcc",
+              os: "ubuntu-latest",
+              cc: "gcc",
+              cxx: "g++"
+            }
     steps:
     - uses: actions/checkout@v4
     - name: tc

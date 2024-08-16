@@ -3,6 +3,7 @@
 
 #include "ssl_vision_wrapper.pb.h"
 #include "ssl_vision_detection.pb.h"
+#include "swig/World.h"
 
 #include <deque>
 
@@ -63,6 +64,8 @@ class WorldModel {
         std::deque<SSL_DetectionFrame> detection; // doubly linked list for storing detection frames
         SSL_GeometryData geometry; // current geometry data
         SSL_WrapperPacket ssl_wrapperpacket;
+
+    friend class Model;
 };
 
 #endif // WORLD_MODEL_H_
