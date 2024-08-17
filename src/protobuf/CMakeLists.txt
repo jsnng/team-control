@@ -13,13 +13,13 @@ set (PROTO_FILES
     ssl_vision_geometry.proto
     ssl_vision_wrapper.proto
 )
-add_library(ssl_protobuf ${PROTO_FILES})
-target_include_directories(ssl_protobuf INTERFACE ${CMAKE_CURRENT_BINARY_DIR})
+add_library(ssl_vision_protobuf ${PROTO_FILES})
+target_include_directories(ssl_vision_protobuf INTERFACE ${CMAKE_CURRENT_BINARY_DIR})
 
-target_link_libraries(ssl_protobuf
+target_link_libraries(ssl_vision_protobuf
     PUBLIC
         protobuf::libprotobuf
         protobuf::libprotoc
 )
 # protobuf_generate_cpp(TARGET protobuf LANGUAGE cpp)
-protobuf_generate(TARGET ssl_protobuf)
+protobuf_generate(TARGET ssl_vision_protobuf)
