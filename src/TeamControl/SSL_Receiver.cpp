@@ -6,6 +6,9 @@
 
 SSLReceiverBase::SSLReceiverBase(std::string_view ip_addr,  std::string_view group_addr, 
         const uint32_t port) {
+    if(port > USHRT_MAX) {
+        throw std::runtime_error("invalid port");
+    }
     std::cerr << "SSLReceiverBase::SSLReceiverBase was called\n";
     std::cerr << "ip_addr: " << ip_addr << " group_addr: " << group_addr << " port: " << port << "\n";
     ssl_multicast_socket(ip_addr, group_addr, port);
@@ -91,6 +94,8 @@ SSLReceiverBase::set_sock_timeout(const uint32_t in_seconds,
 
 std::optional<std::string>
 SSLReceiverBase::receive_ssl_vision() {
+    std::cerr << "SSLReceiverBase::receive_ssl_vision was called\n";
+    std::cerr << "sockfd: " << sockfd << "\n";
     char buffer[SSL_RECV_BUFFER_SIZE];
     ssize_t buf_size = sizeof(char) * SSL_RECV_BUFFER_SIZE;
     struct sockaddr_in from_addr;
@@ -105,16 +110,11 @@ SSLReceiverBase::receive_ssl_vision() {
         buffer[recv_bytes] = '\0';
         return std::string(buffer);
     }
-    #ifdef _WIN32
-    else if(errno!)
-    #endif
-    #if defined(__APPLE__)
     else if(errno != EAGAIN) {
         std::cerr << "No message received. Error: " << 
             strerror(errno) << std::endl;
         return std::nullopt;
     }
-    #endif 
     return std::nullopt;
 }
 

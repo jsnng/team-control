@@ -54,3 +54,7 @@ std::vector<SSL_DetectionRobot> WorldModel::get_robots_blue() {
     std::copy(current_frame.robots_blue().begin(), current_frame.robots_blue().end(), std::back_inserter(robots_blue));
     return robots_blue;
 }
+
+std::deque<SSL_DetectionFrame> WorldModel::get_frames() {
+    return detection;
+}
