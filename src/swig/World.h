@@ -204,7 +204,8 @@ class WorldModelManager {
     public:
     // std::function<return_type(list_of_argument_types(s))>
     std::deque<SSL_DetectionFrame> init(std::function<std::deque<SSL_DetectionFrame>(void)> func) {
-        func();
+        std::deque<SSL_DetectionFrame> result = func();
+        return result;
     }
 };
 #endif // WORLD_H_

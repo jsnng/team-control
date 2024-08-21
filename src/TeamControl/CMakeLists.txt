@@ -1,7 +1,7 @@
 set (SRCS
     SSL_Receiver.cpp
     World_Model.cpp
-    AutoRef.cpp
+    AutoRef.h
 )
 
 add_library(ssl_world_model ${SRCS})
