@@ -12,7 +12,11 @@ set_source_files_properties(World.i PROPERTIES SWIG_FLAG "-includeall")
 set_source_files_properties(${swig_generated_file_fullname}
                              PROPERTIES COMPILE_OPTIONS "-lpython;-dynamiclib")
 swig_add_library(world_model LANGUAGE python SOURCES World.i World.cpp)
-target_link_libraries(world_model PRIVATE ssl_world_model)
+target_link_libraries(world_model PRIVATE ssl_tc_model)
 target_link_libraries(world_model PRIVATE ssl_vision_protobuf)
 target_link_libraries(world_model PRIVATE ${Python3_LIBRARIES})
 target_include_directories(world_model PRIVATE ${Python3_INCLUDE_DIRS})
+
+install(
+    TARGETS ${SWIG_MODULE_${PROJECT_NAME}_REAL_NAME}
+)

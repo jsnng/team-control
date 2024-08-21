@@ -32,7 +32,7 @@ frame_t Model::get_frame() {
     frame->set_frame_number(detection.frame_number());
     frame->set_t_capture(detection.frame_number());
     frame->set_t_sent(detection.t_sent());
-    for(const int i : std::ranges::iota_view{0, detection.balls_size()}) {
+    for(const int i : std::ranges::iota_view(0, detection.balls_size())) {
         SSL_DetectionBall ssl_detectionball = detection.balls(i);
         ball_t ball(ssl_detectionball);
         frame->balls_append(ball);
