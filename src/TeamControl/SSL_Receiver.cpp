@@ -63,7 +63,8 @@ SSLReceiverBase::ssl_multicast_socket(std::string_view ip_addr, std::string_view
     }
 }
 
-void SSLReceiverBase::set_ssl_sock_addr(const uint32_t port) {
+void 
+SSLReceiverBase::set_ssl_sock_addr(const uint32_t port) {
     std::cerr << "SSLReceiverBase::set_ssl_sock_addr was called\n";
 
     #ifdef _WIN32

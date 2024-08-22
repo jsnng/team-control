@@ -45,6 +45,10 @@ class WorldModel {
      * @returns std::vector<SSL_DetectionRobot> a vector of SSL_DetectionRobot objects.
      */
     std::vector<SSL_DetectionRobot> get_robots_blue();
+    /**
+     * get all recieved frames in WorldModel.
+     * @returns deque<SSL_DetectionFrame> deque of all recieved SSL_DetectionFrame.
+     */
     std::deque<SSL_DetectionFrame> get_frames();
     private:
     std::deque<SSL_DetectionFrame> detection; // doubly linked list for storing detection frames

@@ -25,7 +25,8 @@ Model::Model() {
     auto callback = std::bind(&WorldModel::get_frames, WorldModel());
     frames = instance.init(callback);
 }
-frame_t Model::get_frame() {
+frame_t 
+Model::get_frame() {
     SSL_DetectionFrame detection = frames.front();
     frame_t *frame = new frame_t();
     frame->set_camera_id(detection.camera_id());
@@ -49,15 +50,18 @@ frame_t Model::get_frame() {
     }
     return *frame;
 }
-std::vector<ball_t> Model::get_balls() {
+std::vector<ball_t> 
+Model::get_balls() {
     frame_t current_frame = get_frame();
     return current_frame.get_balls();
 }
-std::vector<robot_t> Model::get_robots_yellow() {
+std::vector<robot_t> 
+Model::get_robots_yellow() {
     frame_t current_frame = get_frame();
     return current_frame.get_robots_yellow();
 }
-std::vector<robot_t> Model::get_robots_blue() {
+std::vector<robot_t> 
+Model::get_robots_blue() {
     frame_t current_frame = get_frame();
     return current_frame.get_robots_blue();
 }
