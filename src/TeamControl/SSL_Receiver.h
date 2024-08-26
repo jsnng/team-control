@@ -93,6 +93,10 @@ class SSLReceiverBase {
         int sockfd = -1; // file descriptor that socket() returned
 };
 
+/**
+ * ssl vision reciever
+ * @see https://github.com/RoboCup-SSL/ssl-vision
+ */
 class SSLVisionReceiver : public SSLReceiverBase {
     public:
         SSLVisionReceiver(std::string_view x = "0.0.0.0", std::string_view y = "224.5.23.2", 
@@ -101,6 +105,9 @@ class SSLVisionReceiver : public SSLReceiverBase {
     private:
 };
 
+/**
+ * autoref receiver
+ */
 class SSLAutoRefReceiver : public SSLReceiverBase {
     public:
         SSLAutoRefReceiver(std::string_view x = "0.0.0.0", std::string_view y = "224.5.23.1", 
@@ -108,6 +115,10 @@ class SSLAutoRefReceiver : public SSLReceiverBase {
             SSLReceiverBase(x, y, z) {};
 };
 
+/**
+ * grSim vision reciever
+ * @see https://github.com/RoboCup-SSL/grSim
+ */
 class grSimVisionReceiver : public SSLReceiverBase {
     public:
         grSimVisionReceiver(std::string_view x = "0.0.0.0", std::string_view y = "224.5.23.2", 

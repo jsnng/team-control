@@ -141,7 +141,7 @@ class TeamInformation {
 };
 
 /**
- * @note refer to `protobuf/ssl_gc_referee_message.proto`
+ * @see refer to `protobuf/ssl_gc_referee_message.proto`
  */
 class AutoRef {
     public:

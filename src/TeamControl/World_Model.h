@@ -53,8 +53,7 @@ class WorldModel {
     private:
     std::deque<SSL_DetectionFrame> detection; // doubly linked list for storing detection frames
     SSL_GeometryData geometry; // current geometry data
-    SSL_WrapperPacket ssl_wrapperpacket;
-
+    SSL_WrapperPacket ssl_wrapperpacket; // temporary SSL_WrapperPacket for reading
     friend class Model;
 };
 

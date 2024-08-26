@@ -6,11 +6,12 @@
 
 SSLReceiverBase::SSLReceiverBase(std::string_view ip_addr,  std::string_view group_addr, 
         const uint32_t port) {
-    if(port > USHRT_MAX) {
+    if(port > USHRT_MAX && port < 1) {
         throw std::runtime_error("invalid port");
     }
     std::cerr << "SSLReceiverBase::SSLReceiverBase was called\n";
     std::cerr << "ip_addr: " << ip_addr << " group_addr: " << group_addr << " port: " << port << "\n";
+    // create a new socket to listen to SSL multicast traffic from 224.x.x.x on port 1xxxx
     ssl_multicast_socket(ip_addr, group_addr, port);
 }
 
@@ -80,9 +81,15 @@ SSLReceiverBase::set_ssl_sock_addr(const uint32_t port) {
 }
 
 void
-SSLReceiverBase::set_sock_timeout(const uint32_t in_seconds, 
+SSLReceiverBase::set_sock_timeout(const uint32_t in_seconds,
     const uint32_t in_microseconds) {
     std::cerr << "SSLReceiverBase::set_sock_timeout was called\n";
+    /**
+     * struct `timeval` structure represents an elasped time.
+     * it is declared in `sys/time.h` and has the following members:
+     *  long int tv_sec - represents the number of whole seconds of elasped time.
+     *  long int tv_usec - represents the elasped time (in micorseconds).
+     */
     struct timeval timeout;
     timeout.tv_sec = in_seconds;
     timeout.tv_usec = in_microseconds;
