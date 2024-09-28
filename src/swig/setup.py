@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-
+import setuptools
 from setuptools import setup, find_packages, Extension
 
 if __name__ == '__main__':

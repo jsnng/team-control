@@ -37,72 +37,72 @@ void StateController::unknown_command() {
 void StateController::transiton(Command command) {
     switch(command) {
         case STOP:
-        current_state = STOPPED;
-        stop();
+            current_state = STOPPED;
+            stop();
         break;
         case NORMAL_START:
-        current_state = RUNNING;
-        normal_start();
+            current_state = RUNNING;
+            normal_start();
         break;
         case FORCE_START: 
-        current_state = RUNNING;
-        force_start();
+            current_state = RUNNING;
+            force_start();
         break;
         case PREPARE_KICKOFF_YELLOW:
-        current_state = STOPPED;
-        prepare_kickoff_yellow();
+            current_state = STOPPED;
+            prepare_kickoff_yellow();
         break;
         case PREPARE_KICKOFF_BLUE:
-        current_state = STOPPED;
-        prepare_kickoff_blue();
+            current_state = STOPPED;
+            prepare_kickoff_blue();
         break;
         case PREPARE_PENALTY_YELLOW:
-        current_state = STOPPED;
-        prepare_penalty_yellow();
+            current_state = STOPPED;
+            prepare_penalty_yellow();
         break;
         case PREPARE_PENALTY_BLUE:
-        current_state = STOPPED;
-        prepare_penatly_blue();
+            current_state = STOPPED;
+            prepare_penatly_blue();
         break;
         case DIRECT_FREE_YELLOW:
-        current_state = STOPPED;
-        direct_free_yellow();
+            current_state = STOPPED;
+            direct_free_yellow();
         break;
         case DIRECT_FREE_BLUE:
-        current_state = STOPPED;
-        direct_free_blue();
+            current_state = STOPPED;
+            direct_free_blue();
         break;
         case INDIRECT_FREE_YELLOW:
-        current_state = STOPPED;
-        indirect_free_yellow();
+            current_state = STOPPED;
+            indirect_free_yellow();
         break;
         case INDIRECT_FREE_BLUE:
-        current_state = STOPPED;
-        indirect_free_blue();
+            current_state = STOPPED;
+            indirect_free_blue();
         break;
         case TIMEOUT_YELLOW:
-        current_state = HALTED;
-        timeout_yellow();
+            current_state = HALTED;
+            timeout_yellow();
         break;
         case TIMEOUT_BLUE:
-        current_state = HALTED;
-        timeout_blue();
+            current_state = HALTED;
+            timeout_blue();
         break;
         case GOAL_YELLOW:
-        current_state = HALTED;
-        goal_yellow();
+            current_state = HALTED;
+            goal_yellow();
         break;
         case GOAL_BLUE:
-        current_state = HALTED;
-        goal_blue();
+            current_state = HALTED;
+            goal_blue();
         break;
         case BALL_PLACEMENT_YELLOW:
-        current_state = STOPPED;
-        ball_placement_yellow();
+            current_state = STOPPED;
+            ball_placement_yellow();
         break;
         case BALL_PLACEMENT_BLUE:
-        current_state = STOPPED;
-        ball_placement_blue();
+            current_state = STOPPED;
+            ball_placement_blue();
         break;
         case UNKNOWN_COMMAND:
         default:
@@ -141,46 +141,46 @@ void StageController::post_game() {
 void StageController::tranition(Stage stage) {
     switch(stage) {
         case NORMAL_FIRST_HALF_PRE:
-        normal_first_half_pre();
+            normal_first_half_pre();
         break;
         case NORMAL_FIRST_HALF:
-        normal_first_half();
+            normal_first_half();
         break;
         case NORMAL_HALF_TIME:
-        normal_half_time();
+            normal_half_time();
         break;
         case NORMAL_SECOND_HALF_PRE:
-        normal_second_half_pre();
+            normal_second_half_pre();
         break;
         case NORMAL_SECOND_HALF:
-        normal_second_half();
+            normal_second_half();
         break;
         case EXTRA_TIME_BREAK:
-        extra_time_break();
+            extra_time_break();
         break;
         case EXTRA_FIRST_HALF_PRE:
-        extra_first_half_pre();
+            extra_first_half_pre();
         break;
         case EXTRA_FIRST_HALF:
-        extra_first_half();
+            extra_first_half();
         break;
         case EXTRA_HALF_TIME:
-        extra_half_time();
+            extra_half_time();
         break;
         case EXTRA_SECOND_HALF_PRE:
-        extra_second_half_pre();
+            extra_second_half_pre();
         break;
         case EXTRA_SECOND_HALF:
-        extra_second_half();
+            extra_second_half();
         break;
         case PENALTY_SHOOTOUT_BREAK:
-        penalty_shootout_break();
+            penalty_shootout_break();
         break;
         case PENALTY_SHOOTOUT:
-        penalty_shootout();
+            penalty_shootout();
         break;
         case POST_GAME:
-        post_game();
+            post_game();
         break;
     }
 }

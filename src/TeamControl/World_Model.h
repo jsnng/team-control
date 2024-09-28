@@ -29,6 +29,7 @@ class WorldModel {
      * i.e., all the balls detected in the frame.
      * 
      * @returns std::vector<SSL_DetectionBall> a vector of SSL_DetectionBall objects.
+     * if no balls are detected, an empty std::Vector<SSL_DetectionRobot> is returned
      */
     std::vector<SSL_DetectionBall> get_balls();
     /**
@@ -36,6 +37,7 @@ class WorldModel {
      * i.e., all the robots detected in the frame that belong to the yellow team
      * 
      * @returns std::vector<SSL_DetectionRobot> a vector of SSL_DetectionRobot objects.
+     * if no yellow robots are detected, an empty std::Vector<SSL_DetectionRobot> is returned
      */
     std::vector<SSL_DetectionRobot> get_robots_yellow();
     /**
@@ -43,6 +45,7 @@ class WorldModel {
      * i.e., all the robots detected in the frame that belong to the blue team
      * 
      * @returns std::vector<SSL_DetectionRobot> a vector of SSL_DetectionRobot objects.
+     * if no blue robots are detected, an empty std::Vector<SSL_DetectionRobot> is returned
      */
     std::vector<SSL_DetectionRobot> get_robots_blue();
     /**
