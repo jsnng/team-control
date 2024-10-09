@@ -66,8 +66,9 @@ class StateController {
     };
     void transiton(Command command);
     void halt();
+    template <Command T>
     void stop();
-    template <StageController::Stage T>
+    template <Command T>
     void run();
     private:
     State current_state;

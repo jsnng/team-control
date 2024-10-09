@@ -1,5 +1,51 @@
 #include "AutoRefController.h"
 
+void<Command::NORMAL_START> StateController::run() {
+}
+void<Commmand::FORCE_START> StateController::run() {
+}
+// void<Command::PREPARE_KICKOFF_YELLOW> StateController::run() {
+// }
+// void<Command::PREPARE_KICKOFF_BLUE> StateController::run() {
+// }
+// void<Command::PREPARE_PENALTY_YELLOW> StateController::run() {
+// }
+// void<Command::PREPARE_PENALTY_BLUE> StateController::run() {
+// }
+// void<Command::DIRECT_FREE_YELLOW> StateController::run() {
+// }
+// void<Command::DIRECT_FREE_BLUE> StateController::run() {
+// }
+// void<Command::INDIRECT_FREE_YELLOW> StateController::run() {
+// }
+// void<Command::INDIRECT_FREE_BLUE> StateController::run() {
+// }
+// void<Command::BALL_PLACEMENT_YELLOW> StateController::run() {
+// }
+void<Command::STOP> StateController::stop() {
+}
+void<Command::PREPARE_KICKOFF_YELLOW> StateController::stop() {
+}
+void<Command::PREPARE_KICKOFF_BLUE> StateController::stop() {
+}
+void<Command::PREPARE_PENALTY_YELLOW> StateController::stop() {
+}
+void<Command::PREPARE_PENALTY_BLUE> StateController::stop() {
+}
+void<Command::DIRECT_FREE_YELLOW> StateController::stop() {
+}
+void<Command::DIRECT_FREE_BLUE> StateController::stop() {
+}
+void<Command::INDIRECT_FREE_YELLOW> StateController::stop() {
+}
+void<Command::INDIRECT_FREE_BLUE> StateController::stop() {
+}
+void<Command::BALL_PLACEMENT_YELLOW> StateController::stop() {
+}
+void<Command::BALL_PLACEMENT_BLUE> StateController::stop() {
+}
+void StateController::halt() {
+}
 void StateController::prepare_kickoff_yellow() {
 }
 void StateController::prepare_kickoff_blue() {
@@ -38,47 +84,57 @@ void StateController::transiton(Command command) {
     switch(command) {
         case STOP:
             current_state = STOPPED;
-            stop();
+            stop<STOP>();
         break;
         case NORMAL_START:
             current_state = RUNNING;
             normal_start();
+            start<NORMAL_START>();
         break;
         case FORCE_START: 
             current_state = RUNNING;
             force_start();
+            start<FORCE_START>();
         break;
         case PREPARE_KICKOFF_YELLOW:
             current_state = STOPPED;
             prepare_kickoff_yellow();
+            stop<PREPARE_KICKOFF_YELLOW>();
         break;
         case PREPARE_KICKOFF_BLUE:
             current_state = STOPPED;
             prepare_kickoff_blue();
+            stop<PREPARE_KICKOFF_BLUE>();
         break;
         case PREPARE_PENALTY_YELLOW:
             current_state = STOPPED;
             prepare_penalty_yellow();
+            stop<PREPARE_PENALTY_YELLOW>();
         break;
         case PREPARE_PENALTY_BLUE:
             current_state = STOPPED;
             prepare_penatly_blue();
+            stop<PREPARE_PENALTY_BLUE>();
         break;
         case DIRECT_FREE_YELLOW:
             current_state = STOPPED;
             direct_free_yellow();
+            stop<DIRECT_FREE_YELLOW>();
         break;
         case DIRECT_FREE_BLUE:
             current_state = STOPPED;
             direct_free_blue();
+            stop<DIRECT_FREE_BLUE>();
         break;
         case INDIRECT_FREE_YELLOW:
             current_state = STOPPED;
             indirect_free_yellow();
+            stop<INDIRECT_FREE_YELLOW>();
         break;
         case INDIRECT_FREE_BLUE:
             current_state = STOPPED;
             indirect_free_blue();
+            stop<INDIRECT_FREE_BLUE>();
         break;
         case TIMEOUT_YELLOW:
             current_state = HALTED;
@@ -99,10 +155,12 @@ void StateController::transiton(Command command) {
         case BALL_PLACEMENT_YELLOW:
             current_state = STOPPED;
             ball_placement_yellow();
+            stop<BALL_PLACEMENT_YELLOW>();
         break;
         case BALL_PLACEMENT_BLUE:
             current_state = STOPPED;
             ball_placement_blue();
+            stop<BALL_PLACEMENT_BLUE>();
         break;
         case UNKNOWN_COMMAND:
         default:
