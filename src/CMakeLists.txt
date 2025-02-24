@@ -1,6 +1,5 @@
 add_subdirectory(protobuf)
 add_subdirectory(TeamControl)
-add_subdirectory(swig)
 add_executable(autoplayer SSL_VisionDetection.cpp)
 target_link_libraries(autoplayer PUBLIC ssl_tc_model)
 add_executable(autoref SSL_AutoRef.cpp)
