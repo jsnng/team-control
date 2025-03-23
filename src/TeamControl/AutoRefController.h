@@ -1,3 +1,6 @@
+#ifndef AUTOREFCONTROLLER_H_
+#define AUTOREFCONTROLLER_H_
+
 #include "AutoRef.h"
 
 class StageController {
@@ -66,10 +69,8 @@ class StateController {
     };
     void transiton(Command command);
     void halt();
-    template <Command T>
-    void stop();
-    template <Command T>
-    void run();
+    template <Command T> void stop();
+    template <Command T> void run();
     private:
     State current_state;
     void prepare_kickoff_yellow();
@@ -90,3 +91,5 @@ class StateController {
     void ball_placement_blue();
     void unknown_command();
 };
+
+#endif // AUTOREFCONTROLLER_H_

@@ -6,7 +6,7 @@
 
 SSLReceiverBase::SSLReceiverBase(std::string_view ip_addr,  std::string_view group_addr, 
         const uint32_t port) {
-    if(port > USHRT_MAX && port < 1) {
+    if(port > USHRT_MAX || port < 1) {
         throw std::runtime_error("invalid port");
     }
     std::cerr << "SSLReceiverBase::SSLReceiverBase was called\n";
@@ -65,7 +65,7 @@ SSLReceiverBase::ssl_multicast_socket(std::string_view ip_addr, std::string_view
 }
 
 void 
-SSLReceiverBase::set_ssl_sock_addr(const uint32_t port) {
+SSLReceiverBase::set_ssl_sock_addr(const uint32_t port) noexcept {
     std::cerr << "SSLReceiverBase::set_ssl_sock_addr was called\n";
 
     #ifdef _WIN32
@@ -101,7 +101,7 @@ SSLReceiverBase::set_sock_timeout(const uint32_t in_seconds,
 }
 
 std::optional<std::string>
-SSLReceiverBase::receive_ssl_vision() {
+SSLReceiverBase::receive_ssl_vision() noexcept {
     std::cerr << "SSLReceiverBase::receive_ssl_vision was called\n";
     std::cerr << "sockfd: " << sockfd << "\n";
     char buffer[SSL_RECV_BUFFER_SIZE];

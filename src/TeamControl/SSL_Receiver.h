@@ -58,7 +58,7 @@ class SSLReceiverBase {
          * @returns std::optional<std::string> recieved messages from `sockfd` or std::nullopt
          * 
          */
-        std::optional<std::string> receive_ssl_vision();
+        std::optional<std::string> receive_ssl_vision() noexcept;
         /**
          * sets the socket timeout option
          * 
@@ -84,7 +84,7 @@ class SSLReceiverBase {
          * setup `ssl_socket_addr`
          * @param port mutlicast group port to listen to
          */
-        void set_ssl_sock_addr(const uint32_t port);
+        void set_ssl_sock_addr(const uint32_t port) noexcept;
         inline int get_sockfd() const {
             return sockfd;
         }
