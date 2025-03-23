@@ -6,3 +6,11 @@ pyvenv.cfg
 *.egg-info/
 .DS_Store
 .venv/
+
+*.cpp
+*.h
+Makefile
+CMake*.txt
+CMakeFiles/
+*.cmake
+build/
