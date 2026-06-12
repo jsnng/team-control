@@ -70,10 +70,10 @@ class SSLReceiverBase {
          */
         void set_sock_timeout(const uint32_t in_seconds, const uint32_t in_microseconds);
         /**
-         * sets up a socket to for listening to the mutlicast group
+         * sets up a socket to for listening to the multicast group
          * 
-         * @param group_ip_addr mutlicast group ip addr
-         * @param port mutlicast group port
+         * @param group_ip_addr multicast group ip addr
+         * @param port multicast group port
          * 
          * @throws runtime_error if socket setup fails
          * 
@@ -82,7 +82,7 @@ class SSLReceiverBase {
         void ssl_multicast_socket(std::string_view ip_addr, std::string_view group_addr, const uint32_t port);
         /**
          * setup `ssl_socket_addr`
-         * @param port mutlicast group port to listen to
+         * @param port multicast group port to listen to
          */
         void set_ssl_sock_addr(const uint32_t port) noexcept;
         inline int get_sockfd() const {

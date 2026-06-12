@@ -4,6 +4,8 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",
+                "${workspaceFolder}/build/src/protobuf",
+                "/opt/homebrew/include",
                 "/opt/homebrew/Cellar/python@3.11/3.11.9_1/Frameworks/Python.framework/Versions/3.11/include/python3.11"
             ],
             "defines": [],
@@ -12,7 +14,9 @@
             ],
             "compilerPath": "/usr/bin/clang",
             "cStandard": "c17",
-            "intelliSenseMode": "macos-clang-arm64"
+            "cppStandard": "c++20",
+            "intelliSenseMode": "macos-clang-arm64",
+            "compileCommands": "${workspaceFolder}/build/compile_commands.json"
         }
     ],
     "version": 4

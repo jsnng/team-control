@@ -8,3 +8,6 @@ protobuf/
 bin/
 lib/
 pyvenv.cfg
+
+.cache/
+*.o

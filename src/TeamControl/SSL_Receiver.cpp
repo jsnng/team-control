@@ -19,16 +19,17 @@ void
 SSLReceiverBase::ssl_multicast_socket(std::string_view ip_addr, std::string_view group_addr, 
         const uint32_t port) {
 
+    #ifdef DEBUG
     std::cerr << "SSLReceiverBase::ssl_multicast_socket was called\n";
+    #endif
     // create a socket, issue ::setsockopt() for timeout/broadcasting
     // and bind it.
 
     #ifdef _WIN32
     WSADATA wsaData;
 
-    if(WSASetup(0x0101, &wsaData)) {
-        throw std::runtime_error("WSASetup failed.");
-        return -1;
+    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
+        throw std::runtime_error("WSAStartup failed.");
     }
     #endif
 
@@ -90,9 +91,13 @@ SSLReceiverBase::set_sock_timeout(const uint32_t in_seconds,
      *  long int tv_sec - represents the number of whole seconds of elasped time.
      *  long int tv_usec - represents the elasped time (in micorseconds).
      */
+    #if defined(_WIN32)
+    DWORD timeout = in_seconds * 1000 + in_microseconds / 1000; 
+    #else
     struct timeval timeout;
     timeout.tv_sec = in_seconds;
     timeout.tv_usec = in_microseconds;
+    #endif
     
     if(::setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &timeout, 
         sizeof(timeval)) < 0) {
@@ -102,27 +107,33 @@ SSLReceiverBase::set_sock_timeout(const uint32_t in_seconds,
 
 std::optional<std::string>
 SSLReceiverBase::receive_ssl_vision() noexcept {
+    #ifdef DEBUG
     std::cerr << "SSLReceiverBase::receive_ssl_vision was called\n";
     std::cerr << "sockfd: " << sockfd << "\n";
+    #endif
     char buffer[SSL_RECV_BUFFER_SIZE];
     ssize_t buf_size = sizeof(char) * SSL_RECV_BUFFER_SIZE;
     struct sockaddr_in from_addr;
     socklen_t from_len = sizeof(from_addr);
     ssize_t recv_bytes = recvfrom(sockfd, buffer, buf_size, 0, 
         reinterpret_cast<sockaddr*>(&from_addr), &from_len);
-    if(recv_bytes > buf_size) {
-        std::cerr << "Error: Received packet too large" << std::endl;
+
+    if(recv_bytes > 0) [[ likely ]] {
+        return std::string(buffer, recv_bytes);
+    }
+    #ifdef _WIN32
+    else if(WSALastError() != WSAETIMEDOUT) {
+        std::cerr << "No message received. Error: " << 
+            WSAGetLastError() << std::endl;
         return std::nullopt;
     }
-    if(recv_bytes > 0) [[ likely ]] {
-        buffer[recv_bytes] = '\0';
-        return std::string(buffer);
-    }
+    #else
     else if(errno != EAGAIN) {
         std::cerr << "No message received. Error: " << 
             strerror(errno) << std::endl;
         return std::nullopt;
     }
+    #endif
     return std::nullopt;
 }
 
